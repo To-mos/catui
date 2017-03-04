@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -66,7 +66,7 @@ end
 -- @tab _theme
 -------------------------------------
 function UIButton:initTheme(_theme)
-    local theme = theme or _theme
+    local theme = UITheme or _theme
     self.width = theme.button.width
     self.height = theme.button.height
     self.upColor = theme.button.upColor
@@ -87,7 +87,7 @@ end
 -- draw self
 -------------------------------------
 function UIButton:onDraw()
-    local box = self:getBoundingBox()
+    local box  = self:getBoundingBox()
     local x, y = box.left, box.top
     local w, h = box:getWidth(), box:getHeight()
 
@@ -101,7 +101,8 @@ function UIButton:onDraw()
     else color = self.disableColor end
 
     love.graphics.setColor(color[1], color[2], color[3], color[4])
-    love.graphics.rectangle("fill", x, y, w, h)
+    -- love.graphics.rectangle("fill", x, y, w, h)
+    self:drawOOBox( "fill", x, y, w, h )
 
     -- 按钮描边
     if self.enabled then
@@ -110,7 +111,8 @@ function UIButton:onDraw()
         love.graphics.setLineStyle("rough")
         color = self.strokeColor
         love.graphics.setColor(color[1], color[2], color[3], color[4])
-        love.graphics.rectangle("line", x, y, w, h)
+        -- love.graphics.rectangle("line", x, y, w, h)
+        self:drawOOBox( "line", x, y, w, h )
         love.graphics.setLineWidth(oldLineWidth)
     end
 
@@ -127,6 +129,7 @@ function UIButton:onDraw()
 
     local textX = 0
     local textY = (h - textHeight)/2 + y
+
     local iconX = 0
     local iconY = (h - iconHeight)/2 + y
 
@@ -138,16 +141,24 @@ function UIButton:onDraw()
         iconX = textX + textWidth + space
     end
 
+    local toRad = math.rad
+
+    --orient points to box rotation
+    if self.angle ~= 0 then
+        textX, textY = UIUtils.rotatePt( textX, textY, textX + w * 0.5, textY + h * 0.5, self.angle )
+        iconX, iconY = UIUtils.rotatePt( iconX, iconY, iconX + w * 0.5, iconY + h * 0.5, self.angle )
+    end
+
     -- 文本
     if text then
         color = self.fontColor
         love.graphics.setColor(color[1], color[2], color[3], color[4])
-        love.graphics.draw(text, textX, textY)
+        love.graphics.draw(text, textX, textY, toRad(self.angle))
     end
 
     -- 图标
     if self.iconImg then
-        love.graphics.draw(icon, iconX, iconY)
+        love.graphics.draw(icon, iconX, iconY, toRad(self.angle))
     end
 
     love.graphics.setColor(r, g, b, a)

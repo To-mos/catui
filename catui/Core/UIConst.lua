@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,32 @@ SOFTWARE.
 ]]--
 
 -------------------------------------
--- UI Event define
+-- UI Event constants
 -------------------------------------
 
-UI_MOUSE_DOWN = "mouseDown"
-UI_MOUSE_UP = "mouseUp"
-UI_MOUSE_MOVE = "mouseMove"
+UI_MOUSE_DOWN  = "mouseDown"
+UI_MOUSE_UP    = "mouseUp"
+UI_MOUSE_MOVE  = "mouseMove"
 UI_MOUSE_ENTER = "mouseEnter"
 UI_MOUSE_LEAVE = "mouseLeave"
-UI_WHELL_MOVE = "whellMove"
+UI_WHELL_MOVE  = "whellMove"
 
-UI_CLICK = "click"
-UI_DB_CLICK = "dbClick"
-UI_FOCUS = "focus"
-UI_UN_FOCUS = "unFocus"
+UI_CLICK       = "click"
+UI_DB_CLICK    = "dbClick"
+UI_FOCUS       = "focus"
+UI_UN_FOCUS    = "unFocus"
 
-UI_KEY_DOWN = "keyDown"
-UI_KEY_UP = "keyUp"
-UI_TEXT_INPUT = "textInput"
+UI_KEY_DOWN    = "keyDown"
+UI_KEY_UP      = "keyUp"
+UI_TEXT_INPUT  = "textInput"
 
 UI_TEXT_CHANGE = "textChange"
 
-UI_UPDATE = "update"
-UI_DRAW = "draw"
-UI_MOVE = "move"    -- UI position changed event
-UI_ON_ADD = "onAdd" -- UI on add to parent event
-UI_ON_REMOVE = "onRemove" -- UI remove event
+UI_UPDATE      = "update"
+UI_DRAW        = "draw"
+UI_MOVE        = "move"    -- UI position changed event
+UI_ON_ADD      = "onAdd" -- UI on add to parent event
+UI_ON_REMOVE   = "onRemove" -- UI remove event
 
-UI_ON_SCROLL = "onScroll" -- scroll
-UI_ON_SELECT = "onSelect" -- CheckBox status change event
+UI_ON_SCROLL   = "onScroll" -- scroll
+UI_ON_SELECT   = "onSelect" -- CheckBox status change event

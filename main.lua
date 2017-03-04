@@ -1,15 +1,20 @@
 require "catui"
 
+local buttonD
+local progressBarD
+local progressBarE
+local UIMgr
+
 function love.load(arg)
     love.graphics.setBackgroundColor(35, 42, 50, 255)
 
-    mgr = UIManager:getInstance()
+    UIMgr = UIManager:getInstance()
 
     local content = UIContent:new()
     content:setPos(20, 20)
     content:setSize(300, 450)
     content:setContentSize(500, 500)
-    mgr.rootCtrl.coreContainer:addChild(content)
+    UIMgr.rootCtrl.coreContainer:addChild(content)
 
 
     local buttonA = UIButton:new()
@@ -79,46 +84,92 @@ function love.load(arg)
     progressBarC:setValue(100)
     content:addChild(progressBarC)
 
+    progressBarD = UIProgressBar:new()
+    progressBarD:setPos(20, 260)
+    progressBarD:setSize(100, 10)
+    content:addChild(progressBarD)
+
+    progressBarE = UIProgressBar:new()
+    progressBarE:setPos(150, 260)
+    progressBarE:setSize(100, 10)
+    content:addChild(progressBarE)
+
 
     local editText = UIEditText:new()
-    editText:setPos(20, 270)
+    editText:setPos(20, 290)
     editText:setSize(120, 20)
-    editText:setText("你好!")
+    editText:setText("你好-Hello there!")
     content:addChild(editText)
+
+    --rotation tests
+    buttonD = UIButton:new()
+    buttonD:setPos(150, 200)
+    buttonD:setText("D")
+    buttonD:setIcon("img/icon_haha.png")
+    buttonD:setIconDir("right")
+    buttonD:setAnchor(0, 0)
+    content:addChild(buttonD)
+
+    local editTextAng = UIEditText:new()
+    editTextAng:setPos(20, 360)
+    editTextAng:setSize(120, 20)
+    editTextAng:setText("Angle Text!")
+    editTextAng:setAngle(25)
+    content:addChild(editTextAng)
 end
 
 function love.update(dt)
-    mgr:update(dt)
+    local time = love.timer.getTime( )
+    local sin = math.sin
+
+    if progressBarD ~= nil then        
+        --slide progress between 0 and 100%
+        progressBarD:setValue( (sin(time * 0.5) * 50) + 50 )
+    end
+
+    if progressBarE ~= nil then
+        --rotate between -45 and +45 deg
+        progressBarE:setAngle( sin(time * 0.25) * 45 )
+        --slide progress between 0 and 100%
+        progressBarE:setValue( (sin(time*0.5) * 50) + 50 )
+        -- progressBarE:setValue( 50 )
+    end
+
+    if buttonD ~= nil then
+        --rotate between -45 and +45 deg
+        buttonD:setAngle( sin(time * 0.25) * 45 )
+    end
+    UIMgr:update(dt)
 end
 
 function love.draw()
-    mgr:draw()
+    UIMgr:draw()
 end
 
 function love.mousemoved(x, y, dx, dy)
-    mgr:mouseMove(x, y, dx, dy)
+    UIMgr:mouseMove(x, y, dx, dy)
 end
 
 function love.mousepressed(x, y, button, isTouch)
-    mgr:mouseDown(x, y, button, isTouch)
+    UIMgr:mouseDown(x, y, button, isTouch)
 end
 
 function love.mousereleased(x, y, button, isTouch)
-    mgr:mouseUp(x, y, button, isTouch)
+    UIMgr:mouseUp(x, y, button, isTouch)
 end
 
 function love.keypressed(key, scancode, isrepeat)
-    mgr:keyDown(key, scancode, isrepeat)
+    UIMgr:keyDown(key, scancode, isrepeat)
 end
 
 function love.keyreleased(key)
-    mgr:keyUp(key)
+    UIMgr:keyUp(key)
 end
 
 function love.wheelmoved(x, y)
-    mgr:whellMove(x, y)
+    UIMgr:whellMove(x, y)
 end
 
 function love.textinput(text)
-    mgr:textInput(text)
+    UIMgr:textInput(text)
 end

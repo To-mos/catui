@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -62,6 +62,8 @@ function UIEditText:init(fontName, text, size)
     self.events:on(UI_TEXT_INPUT, self.textInput, self)
     self.events:on(UI_MOUSE_ENTER, self.onMouseEnter, self)
     self.events:on(UI_MOUSE_LEAVE, self.onMouseLeave, self)
+    self.events:on(UI_MOUSE_DOWN, self.onMouseDown, self)
+    self.events:on(UI_MOUSE_UP, self.onMouseUp, self)
     self.events:on(UI_FOCUS, self.onFocus, self)
     self.events:on(UI_UN_FOCUS, self.onUnFocus, self)
 end
@@ -71,7 +73,7 @@ end
 -- @tab _theme
 -------------------------------------
 function UIEditText:initTheme(_theme)
-    local theme = theme or _theme
+    local theme = UITheme or _theme
     self.backgroundColor = theme.editText.backgroundColor
     self.focusStrokeColor = theme.editText.focusStrokeColor
     self.unfocusStrokeColor = theme.editText.unfocusStrokeColor
@@ -98,7 +100,7 @@ end
 -- draw self
 -------------------------------------
 function UIEditText:onDraw()
-    local box = self:getBoundingBox()
+    local box  = self:getBoundingBox()
     local x, y = box.left, box.top
     local w, h = box:getWidth(), box:getHeight()
     local r, g, b, a = love.graphics.getColor()
@@ -106,7 +108,8 @@ function UIEditText:onDraw()
     -- 背景
     local color = self.backgroundColor
     love.graphics.setColor(color[1], color[2], color[3], color[4])
-    love.graphics.rectangle("fill", x, y, w, h)
+    -- love.graphics.rectangle("fill", x, y, w, h)
+    self:drawOOBox( "fill", x, y, w, h )
 
     -- 描边
     if self.focus then
@@ -114,10 +117,12 @@ function UIEditText:onDraw()
     else
         color = self.unfocusStrokeColor
     end
+
     local lineWidth = love.graphics.getLineWidth()
     love.graphics.setLineWidth(self.stroke)
     love.graphics.setColor(color[1], color[2], color[3], color[4])
-    love.graphics.rectangle("line", x, y, w, h)
+    -- love.graphics.rectangle("line", x, y, w, h)
+    self:drawOOBox( "line", x, y, w, h )
     love.graphics.getLineWidth(lineWidth)
 
     love.graphics.setColor(r, g, b, a)
@@ -163,6 +168,10 @@ function UIEditText:onKeyDown(key, scancode, isrepeat)
             self.label:setText(text)
             self.events:dispatch(UI_TEXT_CHANGE, self.label:getText())
         end
+    elseif key == "left" then
+        print( key)
+    elseif key == "right" then
+        print( key)
     end
 
     self.showCursorDt = 0
@@ -194,6 +203,22 @@ end
 -------------------------------------
 function UIEditText:onMouseLeave()
     love.mouse.setCursor()
+end
+
+-------------------------------------
+-- (callback)
+-- on mouse up
+-------------------------------------
+function UIEditText:onMouseUp()
+    print("mouse up")
+end
+
+-------------------------------------
+-- (callback)
+-- on mouse up
+-------------------------------------
+function UIEditText:onMouseDown()
+    print("mouse down")
 end
 
 -------------------------------------
@@ -255,6 +280,10 @@ function UIEditText:drawCursor()
     local color = self.cursorColor
     love.graphics.setColor(color[1], color[2], color[3], color[4])
     love.graphics.setLineWidth(2)
+    --orient points to box rotation
+    -- maxX, maxY = UIUtils.rotatePt( maxX, maxY, maxX, maxY - self.label:getFont():getHeight(), self.angle )
+    -- love.graphics.line(maxX, maxY, maxX, maxY)
+
     love.graphics.line(maxX, maxY, maxX, maxY - self.label:getFont():getHeight())
     love.graphics.setColor(r, g, b, a)
 end

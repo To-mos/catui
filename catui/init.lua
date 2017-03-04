@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]--
 
-utf8 = require "utf8"
-class = require "catui.libs.30log"
+local thisDir = ... .. '.'
 
-require "catui.Core.UIDefine"
+utf8  = require 'utf8'
+class = require( thisDir .. 'libs.30log' )
 
-theme = require "catui.UITheme"
+require( thisDir .. 'Core.UIConst' )
 
-point = require "catui.Utils.Utils"
-Rect = require "catui.Core.Rect"
-UIEvent = require "catui.Core.UIEvent"
-UIControl = require "catui.Core.UIControl"
-UIRoot = require "catui.Core.UIRoot"
-UIManager = require "catui.Core.UIManager"
-UILabel = require "catui.Control.UILabel"
-UIButton = require "catui.Control.UIButton"
-UIImage = require "catui.Control.UIImage"
-UIScrollBar = require "catui.Control.UIScrollBar"
-UIContent = require "catui.Control.UIContent"
-UICheckBox = require "catui.Control.UICheckBox"
-UIProgressBar = require "catui.Control.UIProgressBar"
-UIEditText = require "catui.Control.UIEditText"
+UITheme       = require( thisDir .. 'UITheme' )
+UIUtils       = require( thisDir .. 'Utils.Utils' )
+Rect          = require( thisDir .. 'Core.Rect' )
+
+UIEvent       = require( thisDir .. 'Core.UIEvent' )
+UIControl     = require( thisDir .. 'Core.UIControl' )
+UIRoot        = require( thisDir .. 'Core.UIRoot' )
+UIManager     = require( thisDir .. 'Core.UIManager' )
+-- UIList        = require( thisDir .. 'Control.UIList' )
+UILabel       = require( thisDir .. 'Control.UILabel' )
+UIButton      = require( thisDir .. 'Control.UIButton' )
+UIImage       = require( thisDir .. 'Control.UIImage' )
+UIScrollBar   = require( thisDir .. 'Control.UIScrollBar' )
+UIContent     = require( thisDir .. 'Control.UIContent' )
+UICheckBox    = require( thisDir .. 'Control.UICheckBox' )
+UIProgressBar = require( thisDir .. 'Control.UIProgressBar' )
+UIEditText    = require( thisDir .. 'Control.UIEditText' )

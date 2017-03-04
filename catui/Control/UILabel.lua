@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -77,7 +77,8 @@ function UILabel:onDraw()
     local rb, gb, bb, ab = love.graphics.getColor()
     local color = self.color
     love.graphics.setColor(color[1], color[2], color[3], color[4])
-    love.graphics.draw(self.drawable, box:getX(), box:getY())
+    -- print(math.rad(self.angle))
+    love.graphics.draw(self.drawable, box:getX(), box:getY(), math.rad(self.angle))
     love.graphics.setColor(rb, gb, bb, ab)
 end
 

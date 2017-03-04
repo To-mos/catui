@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +73,7 @@ end
 -- @tab _theme
 -------------------------------------
 function UIContent:initTheme(_theme)
-    local theme = theme or _theme
+    local theme = UITheme or _theme
     self.barSize = theme.content.barSize
     self.backgroundColor = theme.content.backgroundColor
 end

@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -59,6 +59,7 @@ local UIControl = class("UIControl", {
     events = nil,
     clip = false,
     isNeedValidate = false,
+    angle = 0,
     worldX = 0,
     worldY = 0,
     boundingBox = nil
@@ -126,7 +127,7 @@ function UIControl:clipBegin()
         local box = self:getBoundingBox()
 		local x, y = box.left, box.top
         local w, h = box:getWidth(), box:getHeight()
-        self.ox, self.oy, self.ow, self.oh = clipScissor(x, y, w, h)
+        self.ox, self.oy, self.ow, self.oh = UIUtils.clipScissor(x, y, w, h)
 	end
 end
 
@@ -160,10 +161,10 @@ function UIControl:validate()
     self.worldX = x - w
     self.worldY = y - h
 
-    local box = self.boundingBox
-    box.left = self.worldX
-    box.top = self.worldY
-    box.right = self.worldX + self.width
+    local box  = self.boundingBox
+    box.left   = self.worldX
+    box.top    = self.worldY
+    box.right  = self.worldX + self.width
     box.bottom = self.worldY + self.height
 
     for i,v in ipairs(self.children) do
@@ -338,6 +339,22 @@ function UIControl:getHeight()
 end
 
 -------------------------------------
+-- set angle
+-- @treturn number angle (radians)
+-------------------------------------
+function UIControl:setAngle(angle)
+    self.angle = angle
+end
+
+-------------------------------------
+-- get angle
+-- @treturn number angle (radians)
+-------------------------------------
+function UIControl:getAngle()
+    return self.angle
+end
+
+-------------------------------------
 -- get bounding box
 -- @treturn Rect bounding box
 -------------------------------------
@@ -401,9 +418,9 @@ end
 -- @treturn UIControl
 -------------------------------------
 function UIControl:hitTest(x, y)
-    local globalX, globalY = self:globalToLocal(x, y)
+    -- local globalX, globalY = self:globalToLocal(x, y)
 
-    if not self:getBoundingBox():contains(x, y) then
+    if not self:getBoundingBox():contains(x, y, self.angle) then
         return nil
     end
 
@@ -527,6 +544,32 @@ end
 -------------------------------------
 function UIControl:setFocus()
     UIManager:getInstance():setFocus(self)
+end
+
+-------------------------------------
+-- draw object oriented box when angle not 0
+-- @treturn tab child control table
+-------------------------------------
+function UIControl:drawOOBox( style, x, y, w, h )
+    if self.angle ~= 0 then
+        local rtPt = UIUtils.rotatePt
+
+        --orient points to box rotation
+        local nwX, nwY = rtPt( x, y, x + w * 0.5, y + h * 0.5, self.angle )          --top left
+        local neX, neY = rtPt( x + w, y, x + w * 0.5, y + h * 0.5, self.angle )      --top right
+        local seX, seY = rtPt( x + w, y + h, x + w * 0.5, y + h * 0.5, self.angle )  --bottom right
+        local swX, swY = rtPt( x, y + h, x + w * 0.5, y + h * 0.5, self.angle )      --bottom left
+
+        love.graphics.polygon(
+            style, 
+            nwX, nwY,
+            neX, neY,
+            seX, seY,
+            swX, swY
+        )
+    else
+        love.graphics.rectangle( style, x, y, w, h )
+    end
 end
 
 return UIControl

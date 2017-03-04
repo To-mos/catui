@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,10 +50,24 @@ end
 -- @number y
 -- @treturn bool is contains
 -------------------------------------
-function Rect:contains(x, y)
-    if x < self.left or x >= self.right or y < self.top or y >= self.bottom then
+function Rect:contains(x, y, angle)
+    --OOBB
+    if angle ~= nil and angle ~= 0 then
+        --negate rectangle rotation to localize mouse
+        x, y = UIUtils.rotatePt( x, y, 
+            (self.left + self.right) * 0.5,
+            (self.top + self.bottom) * 0.5,
+            -angle
+        )
+    end
+    --AABB
+    if x < self.left or
+       x >= self.right or
+       y < self.top or
+       y >= self.bottom then
         return false
     end
+
     return true
 end
 

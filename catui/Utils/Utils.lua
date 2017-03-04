@@ -1,7 +1,7 @@
-local point = {}
+local utils = {}
 
-function point.rotate(x, y, ox, oy, r)
-    local angle = r * math.pi / 180
+function utils.rotatePt(x, y, ox, oy, r)
+    local angle    = math.rad(r)
     local sinAngle = math.sin(angle)
     local cosAngle = math.cos(angle)
 
@@ -23,7 +23,7 @@ end
 -------------------------------------
 -- Apply a scissor to the current scissor (intersect the rects)
 -------------------------------------
-function clipScissor(nx, ny, nw, nh)
+function utils.clipScissor(nx, ny, nw, nh)
     local ox, oy, ow, oh = love.graphics.getScissor()
     if ox then
         -- Intersect both rects
@@ -39,4 +39,4 @@ function clipScissor(nx, ny, nw, nh)
     return ox, oy, ow, oh
 end
 
-return point
+return utils

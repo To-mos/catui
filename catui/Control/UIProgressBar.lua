@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉
+Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ end
 -- @tab _theme
 -------------------------------------
 function UIProgressBar:initTheme(_theme)
-    local theme = theme or _theme
+    local theme = UITheme or _theme
     self.color = theme.progressBar.color
     self.backgroundColor = theme.progressBar.backgroundColor
 end
@@ -70,7 +70,8 @@ function UIProgressBar:onDraw()
     -- 背景
     local color = self.backgroundColor
     love.graphics.setColor(color[1], color[2], color[3], color[4])
-    love.graphics.rectangle("fill", box:getX(), box:getY(), box:getWidth(), box:getHeight())
+    -- love.graphics.rectangle("fill", box:getX(), box:getY(), box:getWidth(), box:getHeight())
+    self:drawOOBox("fill", box:getX(), box:getY(), box:getWidth(), box:getHeight())
 
     -- 高亮
     local barWidth = self.value / (self.maxValue-self.minValue) * box:getWidth()
@@ -82,7 +83,13 @@ function UIProgressBar:onDraw()
 
     color = self.color
     love.graphics.setColor(color[1], color[2], color[3], color[4])
-    love.graphics.rectangle("fill", box:getX(), box:getY(), barWidth, box:getHeight())
+
+    local x, y = box:getX(), box:getY()
+    --orient points to box rotation
+    local nwX, nwY = UIUtils.rotatePt( x, y, x + barWidth * 0.5, y + box:getHeight() * 0.5, self.angle )
+
+    -- love.graphics.rectangle("fill", box:getX(), box:getY(), barWidth, box:getHeight())
+    self:drawOOBox("fill", nwX, nwY, barWidth, box:getHeight())
 
     love.graphics.setColor(r, g, b, a)
 end
