@@ -119,9 +119,9 @@ function love.load(arg)
     editTextAng:setAngle(25)
     content:addChild(editTextAng)
 
-    local slider = UIButton:new()
+    local slider = UISlider:new()
     slider:setPos(150, 310)
-    slider:setSize(100, 10)
+    slider:setSize(100, 15)
     content:addChild(slider)
 end
 

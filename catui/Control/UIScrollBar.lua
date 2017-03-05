@@ -235,10 +235,25 @@ function UIScrollBar:reset(w, h)
     local ratio = self.ratio
     if self.dir == "vertical" then
         h = h / ratio
+        if h == self.bar:getHeight() then
+            print("ratio big")
+            self.bar.visible = false
+            self.bar.enabled = false
+        else
+            self.bar.visible = true
+            self.bar.enabled = true
+        end
         self.bar:setWidth(w)
         self.bar:setHeight(h)
     else
         w = w / ratio
+        if w == self.bar:getWidth() then
+            self.bar.visible = false
+            self.bar.enabled = false
+        else
+            self.bar.visible = true
+            self.bar.enabled = true
+        end
         self.bar:setWidth(w)
         self.bar:setHeight(h)
     end

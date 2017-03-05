@@ -1,7 +1,7 @@
 --[[
 The MIT License (MIT)
 
-Copyright (c) 2016 WilhanTian  田伟汉, 2017 Thomas Wills
+Copyright (c) 2017 Thomas Wills
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,16 +53,36 @@ local UISlider = UIControl:extend("UISlider", {
 function UISlider:init()
     UIControl.init(self)
 
-    self.bar = UINode()
-    self.bar.events:on(UI_MOUSE_DOWN, self.onMouseDown, self)
-    self.bar.events:on(UI_MOUSE_MOVE, self.onMouseMove, self)
-    self.bar.events:on(UI_MOUSE_UP, self.onMouseUp, self)
-    self:addChild(self.bar)
-
+    self.token = UINode:new()
+    self.token.events:on(UI_MOUSE_DOWN, self.onMouseDown, self)
+    self.token.events:on(UI_MOUSE_MOVE, self.onMouseMove, self)
+    self.token.events:on(UI_MOUSE_UP, self.onMouseUp, self)
+    
     self:initTheme()
+
+    self.token:setSize(self.height, self.height)
+    self:addChild(self.token)
 
     self:setEnabled(true)
     self.events:on(UI_DRAW, self.onDraw, self)
+end
+
+-------------------------------------
+-- init Theme Style
+-- @tab _theme
+-------------------------------------
+function UISlider:initTheme(_theme)
+    local theme = UITheme or _theme
+    self.width        = theme.slider.width
+    self.height       = theme.slider.height
+    self.barColor     = theme.slider.barColor
+    self.barThickness = theme.slider.barThickness
+
+    --override defaults for sliders theme
+    self.token.upColor      = theme.slider.upColor
+    self.token.downColor    = theme.slider.downColor
+    self.token.hoverColor   = theme.slider.hoverColor
+    self.token.disableColor = theme.slider.disableColor
 end
 
 -------------------------------------
@@ -70,7 +90,7 @@ end
 -- draw self
 -------------------------------------
 function UISlider:onDraw()
-    local box = self:getBoundingBox()
+    local box  = self:getBoundingBox()
     local x, y = box.left, box.top
     local w, h = box:getWidth(), box:getHeight()
 
@@ -78,9 +98,13 @@ function UISlider:onDraw()
     local lineWidth  = love.graphics.getLineWidth()
     local color      = self.barColor
 
+    love.graphics.rectangle( 'fill', x, y, self.width, self.height )
+
     --line
     love.graphics.setLineWidth( self.barThickness )
     love.graphics.setColor( color[1], color[2], color[3], color[4] )
+
+    love.graphics.line(x, y + h * 0.5, x + w, y + h * 0.5)
 
     --draw segments between ends
     -- for i = 0, self.numOfTicks, 1 do
@@ -93,43 +117,6 @@ function UISlider:onDraw()
 
     love.graphics.setLineWidth( lineWidth )
     love.graphics.setColor( r, g, b, a )
-end
-
--------------------------------------
--- init Theme Style
--- @tab _theme
--------------------------------------
-function UISlider:initTheme(_theme)
-    local theme = UITheme or _theme
-    self.width        = theme.slider.width
-    self.height       = theme.slider.height
-    self.upColor      = theme.slider.upColor
-    self.downColor    = theme.slider.downColor
-    self.hoverColor   = theme.slider.hoverColor
-    self.disableColor = theme.slider.disableColor
-    self.barColor     = theme.slider.barColor
-    self.barThickness = theme.slider.barThickness
-
-    self.token:setUpColor(self.upColor)
-    self.token:setDownColor(self.downColor)
-    self.token:setHoverColor(self.hoverColor)
-end
-
--------------------------------------
--- set bar scroll direction
--- @string dir "vertical" or "horizontal", default is vertical
--------------------------------------
-function UISlider:setDir(dir)
-    self.dir = dir
-    self:reset()
-end
-
--------------------------------------
--- get bar scroll direction
--- @treturn string direction
--------------------------------------
-function UISlider:getDir()
-    return self.dir
 end
 
 -------------------------------------
@@ -147,27 +134,17 @@ end
 function UISlider:onMouseMove(x, y, dx, dy)
     if not self.mouseDown then return end
 
-    local bar = self.bar
+    local bar = self.token
 
-    if self.dir == "vertical" then
-        local after = bar:getY() + dy
-        if after < 0 then
-            after = 0
-        elseif after + bar:getHeight() > self:getHeight() then
-            after = self:getHeight() - bar:getHeight()
-        end
-        self.barPosRatio = after / (self:getHeight() - bar:getHeight())
-    else
-        local after = bar:getX() + dx
-        if after < 0 then
-            after = 0
-        elseif after + bar:getWidth() > self:getWidth() then
-            after = self:getWidth() - bar:getWidth()
-        end
-        self.barPosRatio = after / (self:getWidth() - bar:getWidth())
+    local after = bar:getX() + dx
+    if after < 0 then
+        after = 0
+    elseif after + bar:getWidth() > self:getWidth() then
+        after = self:getWidth() - bar:getWidth()
     end
+    self.tokenPosRatio = after / (self:getWidth() - bar:getWidth())
 
-    self:setBarPos(self.barPosRatio)
+    self:setBarPos(self.tokenPosRatio)
 end
 
 -------------------------------------
@@ -183,7 +160,7 @@ end
 -------------------------------------
 function UISlider:setSize(width, height)
     UIControl.setSize(self, width, height)
-    self:reset()
+    self.token:setSize(height, height)
 end
 
 -------------------------------------
@@ -191,7 +168,6 @@ end
 -------------------------------------
 function UISlider:setWidth(width)
     UIControl.setWidth(self, width)
-    self:reset()
 end
 
 -------------------------------------
@@ -199,7 +175,7 @@ end
 -------------------------------------
 function UISlider:setHeight(height)
     UIControl.setHeight(self, height)
-    self:reset()
+    self.token:setSize(self.height, self.height)
 end
 
 -------------------------------------
@@ -232,22 +208,6 @@ end
 -------------------------------------
 function UISlider:setRatio(ratio)
     self.ratio = ratio < 1 and 1 or ratio
-    self:reset()
-end
-
--------------------------------------
--- reset contorl
--------------------------------------
-function UISlider:reset()
-    local ratio = self.ratio
-    if self.dir == "vertical" then
-        self.bar:setWidth(self:getWidth())
-        self.bar:setHeight(self:getHeight() / ratio)
-    else
-        self.bar:setWidth(self:getWidth() / ratio)
-        self.bar:setHeight(self:getHeight())
-    end
-    self:setBarPos(self.barPosRatio)
 end
 
 -------------------------------------
@@ -258,14 +218,9 @@ function UISlider:setBarPos(ratio)
     if ratio < 0 then ratio = 0 end
     if ratio > 1 then ratio = 1 end
 
-    self.barPosRatio = ratio
-    if self.dir == "vertical" then
-        self.bar:setX(0)
-        self.bar:setY((self:getHeight() - self.bar:getHeight()) * ratio)
-    else
-        self.bar:setX((self:getWidth() - self.bar:getWidth()) * ratio)
-        self.bar:setY(0)
-    end
+    self.tokenPosRatio = ratio
+    self.token:setX((self:getWidth() - self.token:getWidth()) * ratio)
+    self.token:setY(0)
 
     self.events:dispatch(UI_ON_SCROLL, ratio)
 end
@@ -275,7 +230,7 @@ end
 -- @treturn number ratio
 -------------------------------------
 function UISlider:getBarPos()
-    return self.barPosRatio
+    return self.tokenPosRatio
 end
 
 return UISlider

@@ -40,14 +40,14 @@ theme.button.iconDir          = "left"
 theme.button.iconAndTextSpace = 8
 
 theme.slider = {}
-theme.slider.width        = 80
-theme.slider.height       = 36
+theme.slider.width        = 100
+theme.slider.height       = 15
 theme.slider.upColor      = {57, 69, 82, 255}
 theme.slider.downColor    = {30, 35, 41, 255}
 theme.slider.hoverColor   = {71, 87, 103, 255}
 theme.slider.disableColor = {48, 57, 66, 255}
-theme.slider.barColor     = {25, 30, 35, 255}
-theme.slider.barThickness = 1
+theme.slider.barColor     = {84, 108, 119, 255}
+theme.slider.barThickness = 4
 
 theme.scrollBar = {}
 theme.scrollBar.upColor         = {84, 108, 119, 255}
