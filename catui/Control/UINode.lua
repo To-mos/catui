@@ -13,6 +13,7 @@ local UINode = UIControl:extend( "UINode", {
     bar = nil,
     barDown = false,
     barPosRatio = 0,
+    resizeNode = false
 } )
 
 -------------------------------------
@@ -55,6 +56,7 @@ function UINode:onDraw()
     local w, h = box:getWidth(), box:getHeight()
 
     local r, g, b, a = love.graphics.getColor()
+    local lineWidth = love.graphics.getLineWidth()
 
     if self.color ~= nil then
         local color = self.color
@@ -79,7 +81,68 @@ function UINode:onDraw()
         love.graphics.rectangle( 'fill', x, y, w, h )
     end
 
+    if self.resizeNode then
+        local color = self.upColor
+        love.graphics.setColor(color[1], color[2], color[3], color[4])
+        love.graphics.rectangle("fill", x, y, w, h)
+
+        color = self.hoverColor
+        love.graphics.setColor(color[1], color[2], color[3], color[4])
+        love.graphics.setLineWidth(2)
+        love.graphics.line(
+            x + w * 0.9,
+            y + h * 0.1,
+            x + w * 0.1,
+            y + h * 0.9
+        )
+        love.graphics.line(
+            x + w * 0.9,
+            y + h * 0.4,
+            x + w * 0.4,
+            y + h * 0.9
+        )
+        love.graphics.line(
+            x + w * 0.9,
+            y + h * 0.7,
+            x + w * 0.7,
+            y + h * 0.9
+        )
+    end
+
     love.graphics.setColor(r, g, b, a)
+    love.graphics.setLineWidth(lineWidth)
+end
+
+-------------------------------------
+-- set button up color
+-- @tab color color = {r, g, b, a}
+-------------------------------------
+function UINode:setUpColor(color)
+    self.upColor = color
+end
+
+-------------------------------------
+-- set button down color
+-- @tab color color = {r, g, b, a}
+-------------------------------------
+function UINode:setDownColor(color)
+    self.downColor = color
+end
+
+-------------------------------------
+-- set button hover color
+-- @tab color color = {r, g, b, a}
+-------------------------------------
+function UINode:setHoverColor(color)
+    self.hoverColor = color
+end
+
+-------------------------------------
+-- set button disable color
+-- @tab color color = {r, g, b, a}
+-------------------------------------
+function UINode:setDisableColor(color)
+    self.disableColor = color
 end
 
 -------------------------------------

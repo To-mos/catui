@@ -277,6 +277,7 @@ function UIEditText:drawCursor()
     local maxY = self.label:getBoundingBox():getY() + self.label:getFont():getHeight() * length
 
     local r, g, b, a = love.graphics.getColor()
+    local lineWidth = love.graphics.getLineWidth()
     local color = self.cursorColor
     love.graphics.setColor(color[1], color[2], color[3], color[4])
     love.graphics.setLineWidth(2)
@@ -286,6 +287,7 @@ function UIEditText:drawCursor()
 
     love.graphics.line(maxX, maxY, maxX, maxY - self.label:getFont():getHeight())
     love.graphics.setColor(r, g, b, a)
+    love.graphics.setLineWidth(lineWidth)
 end
 
 -------------------------------------

@@ -32,6 +32,7 @@ SOFTWARE.
 -------------------------------------
 local UIContent = UIControl:extend("UIContent", {
     backgroundColor = nil,
+    resizeColor     = nil,
     barSize         = 12,
     minWidth        = 0,
     minHeight       = 0,
@@ -103,15 +104,6 @@ function UIContent:onDraw()
     love.graphics.setColor(color[1], color[2], color[3], color[4])
     love.graphics.rectangle("fill", box:getX(), box:getY(), box:getWidth(), box:getHeight())
 
-    local x, y = self.resizeSE:getPos()
-    local w, h = self.resizeSE:getPos()
-    love.graphics.line(
-        x + w * 0.9,
-        y + h * 0.1,
-        x + w * 0.1,
-        y + h * 0.9
-    )
-
     love.graphics.setColor(r, g, b, a)
 end
 
@@ -123,6 +115,7 @@ function UIContent:resizable(resize)
     self.resizeSE.resizeable = resize
     self.resizeSE.enabled    = resize
     self.resizeSE.visible    = resize
+    self.resizeSE.resizeNode = resize
 end
 
 -------------------------------------

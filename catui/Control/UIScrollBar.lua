@@ -100,7 +100,7 @@ end
 -------------------------------------
 function UIScrollBar:setDir(dir)
     self.dir = dir
-    self:reset()
+    self:reset(self:getWidth(), self:getHeight())
 end
 
 -------------------------------------
@@ -176,7 +176,7 @@ end
 -------------------------------------
 function UIScrollBar:setSize(width, height)
     UIControl.setSize(self, width, height)
-    self:reset()
+    self:reset(width, height)
 end
 
 -------------------------------------
@@ -184,7 +184,7 @@ end
 -------------------------------------
 function UIScrollBar:setWidth(width)
     UIControl.setWidth(self, width)
-    self:reset()
+    self:reset(width, self:getHeight())
 end
 
 -------------------------------------
@@ -192,7 +192,7 @@ end
 -------------------------------------
 function UIScrollBar:setHeight(height)
     UIControl.setHeight(self, height)
-    self:reset()
+    self:reset(self:getWidth(), height)
 end
 
 -------------------------------------
@@ -225,20 +225,22 @@ end
 -------------------------------------
 function UIScrollBar:setRatio(ratio)
     self.ratio = ratio < 1 and 1 or ratio
-    self:reset()
+    self:reset(self:getWidth(), self:getHeight())
 end
 
 -------------------------------------
 -- reset contorl
 -------------------------------------
-function UIScrollBar:reset()
+function UIScrollBar:reset(w, h)
     local ratio = self.ratio
     if self.dir == "vertical" then
-        self.bar:setWidth(self:getWidth())
-        self.bar:setHeight(self:getHeight() / ratio)
+        h = h / ratio
+        self.bar:setWidth(w)
+        self.bar:setHeight(h)
     else
-        self.bar:setWidth(self:getWidth() / ratio)
-        self.bar:setHeight(self:getHeight())
+        w = w / ratio
+        self.bar:setWidth(w)
+        self.bar:setHeight(h)
     end
     self:setBarPos(self.barPosRatio)
 end

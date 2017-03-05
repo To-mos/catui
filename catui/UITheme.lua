@@ -57,6 +57,7 @@ theme.scrollBar.backgroundColor = {47, 59, 69, 255}
 
 theme.content = {}
 theme.content.backgroundColor = {31, 36, 43, 255}
+theme.content.resizeColor     = {57, 69, 82, 255}
 theme.content.barSize         = 14
 
 theme.checkBox = {}
