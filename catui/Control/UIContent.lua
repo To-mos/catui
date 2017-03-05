@@ -33,14 +33,15 @@ SOFTWARE.
 local UIContent = UIControl:extend("UIContent", {
     backgroundColor = nil,
     barSize         = 12,
-    minWidth        = 60,
-    minHeight       = 60,
+    minWidth        = 0,
+    minHeight       = 0,
 
     contentCtrl     = nil,
     vBar            = nil,
     hBar            = nil,
     resizeSE        = nil,
-    resizeDown      = false
+    resizeDown      = false,
+    resizable       = false
 })
 
 -------------------------------------
@@ -77,6 +78,8 @@ function UIContent:init()
     self.resizeSE.events:on(UI_MOUSE_MOVE, self.onResizeMove, self)
     self.resizeSE.events:on(UI_MOUSE_UP, self.onResizeUp, self)
     UIControl.addChild(self, self.resizeSE)
+
+    self:resizable(false)
 end
 
 -------------------------------------
@@ -110,6 +113,16 @@ function UIContent:onDraw()
     )
 
     love.graphics.setColor(r, g, b, a)
+end
+
+-------------------------------------
+-- (callback)
+-- can we resize the window
+-------------------------------------
+function UIContent:resizable(resize)
+    self.resizeSE.resizeable = resize
+    self.resizeSE.enabled    = resize
+    self.resizeSE.visible    = resize
 end
 
 -------------------------------------
@@ -201,6 +214,17 @@ function UIContent:onHBarScroll(ratio)
 end
 
 -------------------------------------
+-- (callback)
+-- set minimum size
+-------------------------------------
+function UIContent:setMinSize(width, height)
+    if width < 0 then width = 0 end
+    if height < 0 then height = 0 end
+    self.minWidth = width
+    self.minHeight = height
+end
+
+-------------------------------------
 -- (override)
 -------------------------------------
 function UIContent:setSize(width, height)
@@ -215,6 +239,15 @@ function UIContent:setSize(width, height)
 end
 
 -------------------------------------
+-- (callback)
+-- set minimum size
+-------------------------------------
+function UIContent:setMinWidth(width)
+    if width < 0 then width = 0 end
+    self.minWidth = width
+end
+
+-------------------------------------
 -- (override)
 -------------------------------------
 function UIContent:setWidth(width)
@@ -223,6 +256,15 @@ function UIContent:setWidth(width)
     end
     UIControl.setWidth(self, width)
     self:resetBar()
+end
+
+-------------------------------------
+-- (callback)
+-- set minimum size
+-------------------------------------
+function UIContent:setMinHeight(height)
+    if height < 0 then height = 0 end
+    self.minHeight = height
 end
 
 -------------------------------------
@@ -337,8 +379,10 @@ function UIControl:resetBar()
     self.vBar:setRatio(ch/h)
     self.hBar:setRatio(cw/w)
 
-    self.resizeSE:setSize(self.barSize, self.barSize)
-    self.resizeSE:setPos(w - self.barSize, h - self.barSize)
+    if self.resizable then
+        self.resizeSE:setSize(self.barSize, self.barSize)
+        self.resizeSE:setPos(w - self.barSize, h - self.barSize)
+    end
 end
 
 return UIContent

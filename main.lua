@@ -14,6 +14,8 @@ function love.load(arg)
     content:setPos(20, 20)
     content:setSize(300, 450)
     content:setContentSize(500, 500)
+    content:resizable( true )
+    content:setMinSize( 60, 60 )
     UIMgr.rootCtrl.coreContainer:addChild(content)
 
 
