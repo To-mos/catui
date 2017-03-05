@@ -25,21 +25,26 @@ SOFTWARE.
 -------------------------------------
 -- UISlider
 -- @usage
--- local bar = UISlider:new()
+-- local bar = UISlider()
 -- bar:setSize(100, 20)
 -- bar:setDir("vertical")
 -------------------------------------
 local UISlider = UIControl:extend("UISlider", {
-    upColor = nil,
-    downColor = nil,
-    hoverColor = nil,
+    value      = 0,
+    minValue   = 0,
+    maxValue   = 100,
+    numOfTicks = 10,
+
+    upColor         = nil,
+    downColor       = nil,
+    hoverColor      = nil,
     backgroundColor = nil,
 
-    dir = "vertical", --horizontal
-    ratio = 3, --bar占多少比例
-    bar = nil,
-    barDown = false,
-    barPosRatio = 0,
+    dir         = "vertical", --horizontal
+    ratio       = 3, --bar proportions
+    bar         = nil,
+    mouseDown   = false,
+    barPosRatio = 0
 })
 
 -------------------------------------
@@ -48,17 +53,16 @@ local UISlider = UIControl:extend("UISlider", {
 function UISlider:init()
     UIControl.init(self)
 
-    self.bar = UIButton:new()
-    self.bar.events:on(UI_MOUSE_DOWN, self.onBarDown, self)
-    self.bar.events:on(UI_MOUSE_MOVE, self.onBarMove, self)
-    self.bar.events:on(UI_MOUSE_UP, self.onBarUp, self)
+    self.bar = UINode()
+    self.bar.events:on(UI_MOUSE_DOWN, self.onMouseDown, self)
+    self.bar.events:on(UI_MOUSE_MOVE, self.onMouseMove, self)
+    self.bar.events:on(UI_MOUSE_UP, self.onMouseUp, self)
     self:addChild(self.bar)
 
     self:initTheme()
 
     self:setEnabled(true)
     self.events:on(UI_DRAW, self.onDraw, self)
-    self.events:on(UI_MOUSE_DOWN, self.onBgDown, self)
 end
 
 -------------------------------------
@@ -71,10 +75,24 @@ function UISlider:onDraw()
     local w, h = box:getWidth(), box:getHeight()
 
     local r, g, b, a = love.graphics.getColor()
-    local color = self.backgroundColor
-    love.graphics.setColor(color[1], color[2], color[3], color[4])
-    love.graphics.rectangle("fill", x, y, w, h)
-    love.graphics.setColor(r, g, b, a)
+    local lineWidth  = love.graphics.getLineWidth()
+    local color      = self.barColor
+
+    --line
+    love.graphics.setLineWidth( self.barThickness )
+    love.graphics.setColor( color[1], color[2], color[3], color[4] )
+
+    --draw segments between ends
+    -- for i = 0, self.numOfTicks, 1 do
+        
+    --     love.graphics.setLineWidth(self.stroke)
+    --     love.graphics.setColor(color[1], color[2], color[3], color[4])
+    --     love.graphics.line()
+    --     love.graphics.setLineWidth(self.stroke)
+    -- end
+
+    love.graphics.setLineWidth( lineWidth )
+    love.graphics.setColor( r, g, b, a )
 end
 
 -------------------------------------
@@ -83,15 +101,18 @@ end
 -------------------------------------
 function UISlider:initTheme(_theme)
     local theme = UITheme or _theme
-    self.upColor = theme.scrollBar.upColor
-    self.downColor = theme.scrollBar.downColor
-    self.hoverColor = theme.scrollBar.hoverColor
-    self.backgroundColor = theme.scrollBar.backgroundColor
+    self.width        = theme.slider.width
+    self.height       = theme.slider.height
+    self.upColor      = theme.slider.upColor
+    self.downColor    = theme.slider.downColor
+    self.hoverColor   = theme.slider.hoverColor
+    self.disableColor = theme.slider.disableColor
+    self.barColor     = theme.slider.barColor
+    self.barThickness = theme.slider.barThickness
 
-    self.bar:setStroke(0)
-    self.bar:setUpColor(self.upColor)
-    self.bar:setDownColor(self.downColor)
-    self.bar:setHoverColor(self.hoverColor)
+    self.token:setUpColor(self.upColor)
+    self.token:setDownColor(self.downColor)
+    self.token:setHoverColor(self.hoverColor)
 end
 
 -------------------------------------
@@ -115,16 +136,16 @@ end
 -- (callback)
 -- on bar down
 -------------------------------------
-function UISlider:onBarDown(x, y)
-    self.barDown = true
+function UISlider:onMouseDown(x, y)
+    self.mouseDown = true
 end
 
 -------------------------------------
 -- (callback)
 -- on bar move
 -------------------------------------
-function UISlider:onBarMove(x, y, dx, dy)
-    if not self.barDown then return end
+function UISlider:onMouseMove(x, y, dx, dy)
+    if not self.mouseDown then return end
 
     local bar = self.bar
 
@@ -153,22 +174,8 @@ end
 -- (callback)
 -- on bar up
 -------------------------------------
-function UISlider:onBarUp(x, y)
-    self.barDown = false
-end
-
--------------------------------------
--- (callback)
--- on bar down
--------------------------------------
-function UISlider:onBgDown(x, y)
-    x, y = self:globalToLocal(x, y)
-
-    if self.dir == "vertical" then
-        self:setBarPos(y / self:getHeight())
-    else
-        self:setBarPos(x / self:getWidth())
-    end
+function UISlider:onMouseUp(x, y)
+    self.mouseDown = false
 end
 
 -------------------------------------

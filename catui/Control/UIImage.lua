@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UIImage
 -- @usage
--- local img = UIImage:new("img/gem.png")
+-- local img = UIImage("img/gem.png")
 -------------------------------------
 local UIImage = UIControl:extend("UIImage", {
     drawable = nil

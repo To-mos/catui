@@ -172,7 +172,7 @@ function love.keyreleased(key)
 end
 
 function love.wheelmoved(x, y)
-    UIMgr:whellMove(x, y)
+    UIMgr:wheelMove(x, y)
 end
 
 function love.textinput(text)

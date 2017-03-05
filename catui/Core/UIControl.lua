@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UIControl
 -- @usage
--- local control = UIControl:new()
+-- local control = UIControl()
 --
 -- -- enable control
 -- control:setEnabled(true)

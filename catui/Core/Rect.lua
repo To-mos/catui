@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- Rect
 -- @usage
--- local rect = Rect:new(10, 10, 10, 10)
+-- local rect = Rect(10, 10, 10, 10)
 -------------------------------------
 local Rect = class("Rect", {
     left = 0,

@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UIButton
 -- @usage
--- local button = UIButton:new()
+-- local button = UIButton()
 -------------------------------------
 local UIButton = UIControl:extend("UIButton", {
     isHoved = false,
@@ -92,13 +92,16 @@ function UIButton:onDraw()
     local w, h = box:getWidth(), box:getHeight()
 
     local r, g, b, a = love.graphics.getColor()
-    local color = nil
+    local color = self.disableColor
 
     -- 按钮本身
-    if self.isPressed then color = self.downColor
-    elseif self.isHoved then color = self.hoverColor
-    elseif self.enabled then color = self.upColor
-    else color = self.disableColor end
+    if self.isPressed then
+        color = self.downColor
+    elseif self.isHoved then
+        color = self.hoverColor
+    elseif self.enabled then
+        color = self.upColor
+    end
 
     love.graphics.setColor(color[1], color[2], color[3], color[4])
     -- love.graphics.rectangle("fill", x, y, w, h)

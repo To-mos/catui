@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UILabel
 -- @usage
--- local label = UILabel:new("font/visat.ttf", "Hello World！", 24)
+-- local label = UILabel("font/visat.ttf", "Hello World！", 24)
 -- label:setAnchor(0, 0)
 -- label:setSize(100, 100)
 -- label:setAutoSize(false)

@@ -23,48 +23,68 @@ SOFTWARE.
 ]]--
 
 local theme = {}
-theme.button = {}
-theme.scrollBar = {}
-theme.content = {}
-theme.checkBox = {}
-theme.progressBar = {}
-theme.editText = {}
 
-theme.button.width = 80
-theme.button.height = 36
-theme.button.upColor = {57, 69, 82, 255}
-theme.button.downColor = {30, 35, 41, 255}
-theme.button.hoverColor = {71, 87, 103, 255}
-theme.button.disableColor = {48, 57, 66, 255}
-theme.button.strokeColor = {25, 30, 35, 255}
-theme.button.stroke = 1
-theme.button.font = "font/visat.ttf"
-theme.button.fontSize = 16
-theme.button.fontColor = {255, 255, 255, 255}
-theme.button.iconDir = "left"
+theme.button = {}
+theme.button.width            = 80
+theme.button.height           = 36
+theme.button.upColor          = {57, 69, 82, 255}
+theme.button.downColor        = {30, 35, 41, 255}
+theme.button.hoverColor       = {71, 87, 103, 255}
+theme.button.disableColor     = {48, 57, 66, 255}
+theme.button.strokeColor      = {25, 30, 35, 255}
+theme.button.stroke           = 1
+theme.button.font             = "font/visat.ttf"
+theme.button.fontSize         = 16
+theme.button.fontColor        = {255, 255, 255, 255}
+theme.button.iconDir          = "left"
 theme.button.iconAndTextSpace = 8
 
-theme.scrollBar.upColor = {84, 108, 119, 255}
-theme.scrollBar.hoverColor = {112, 158, 184, 255}
-theme.scrollBar.downColor = {84, 108, 119, 255}
+theme.slider = {}
+theme.slider.width        = 80
+theme.slider.height       = 36
+theme.slider.upColor      = {57, 69, 82, 255}
+theme.slider.downColor    = {30, 35, 41, 255}
+theme.slider.hoverColor   = {71, 87, 103, 255}
+theme.slider.disableColor = {48, 57, 66, 255}
+theme.slider.barColor     = {25, 30, 35, 255}
+theme.slider.barThickness = 1
+
+theme.scrollBar = {}
+theme.scrollBar.upColor         = {84, 108, 119, 255}
+theme.scrollBar.hoverColor      = {112, 158, 184, 255}
+theme.scrollBar.downColor       = {84, 108, 119, 255}
 theme.scrollBar.backgroundColor = {47, 59, 69, 255}
 
+theme.content = {}
 theme.content.backgroundColor = {31, 36, 43, 255}
-theme.content.barSize = 14
+theme.content.barSize         = 14
 
-theme.checkBox.upColor = {255, 255, 255, 255}
-theme.checkBox.downColor = {0, 150, 224, 255}
-theme.checkBox.hoverColor = {0, 150, 224, 255}
+theme.checkBox = {}
+theme.checkBox.upColor      = {255, 255, 255, 255}
+theme.checkBox.downColor    = {0, 150, 224, 255}
+theme.checkBox.hoverColor   = {0, 150, 224, 255}
 theme.checkBox.disableColor = {84, 108, 119, 255}
-theme.checkBox.size = 16
+theme.checkBox.size         = 16
 
-theme.progressBar.color = {57, 104, 149, 255}
+theme.progressBar = {}
+theme.progressBar.width           = 100
+theme.progressBar.height          = 10
+theme.progressBar.color           = {57, 104, 149, 255}
 theme.progressBar.backgroundColor = {47, 59, 69, 255}
 
-theme.editText.backgroundColor = {255, 255, 255, 255}
-theme.editText.focusStrokeColor = {57, 104, 149, 255}
+theme.node = {}
+theme.node.width        = 20
+theme.node.height       = 20
+theme.node.upColor      = {57, 69, 82, 255}
+theme.node.downColor    = {30, 35, 41, 255}
+theme.node.hoverColor   = {71, 87, 103, 255}
+theme.node.disableColor = {48, 57, 66, 255}
+
+theme.editText = {}
+theme.editText.backgroundColor    = {255, 255, 255, 255}
+theme.editText.focusStrokeColor   = {57, 104, 149, 255}
 theme.editText.unfocusStrokeColor = {41, 50, 59, 255}
-theme.editText.cursorColor = {82, 139, 255, 255}
-theme.editText.stroke = 1
+theme.editText.cursorColor        = {82, 139, 255, 255}
+theme.editText.stroke             = 1
 
 return theme

@@ -26,17 +26,21 @@ SOFTWARE.
 -- UIContent
 -- A scroll container, default with two scrollbar
 -- @usage
--- local content = UIContent:new()
+-- local content = UIContent()
 -- content:setSize(100, 100) -- set frame size
 -- content:setContentSize(450, 450) -- set content size
 -------------------------------------
 local UIContent = UIControl:extend("UIContent", {
     backgroundColor = nil,
-    barSize = 12,
+    barSize         = 12,
+    minWidth        = 60,
+    minHeight       = 60,
 
-    contentCtrl = nil,
-    vBar = nil,
-    hBar = nil
+    contentCtrl     = nil,
+    vBar            = nil,
+    hBar            = nil,
+    resizeSE        = nil,
+    resizeDown      = false
 })
 
 -------------------------------------
@@ -55,17 +59,24 @@ function UIContent:init()
     self.contentCtrl = UIControl:new()
     UIControl.addChild(self, self.contentCtrl)
 
-    -- 垂直
+    -- Vertical
     self.vBar = UIScrollBar:new()
     self.vBar:setDir("vertical")
     self.vBar.events:on(UI_ON_SCROLL, self.onVBarScroll, self)
     UIControl.addChild(self, self.vBar)
 
-    -- 水平
+    -- Horizontal
     self.hBar = UIScrollBar:new()
     self.hBar:setDir("horizontal")
     self.hBar.events:on(UI_ON_SCROLL, self.onHBarScroll, self)
     UIControl.addChild(self, self.hBar)
+
+    -- Resize
+    self.resizeSE = UINode:new()
+    self.resizeSE.events:on(UI_MOUSE_DOWN, self.onResizeDown, self)
+    self.resizeSE.events:on(UI_MOUSE_MOVE, self.onResizeMove, self)
+    self.resizeSE.events:on(UI_MOUSE_UP, self.onResizeUp, self)
+    UIControl.addChild(self, self.resizeSE)
 end
 
 -------------------------------------
@@ -74,7 +85,7 @@ end
 -------------------------------------
 function UIContent:initTheme(_theme)
     local theme = UITheme or _theme
-    self.barSize = theme.content.barSize
+    self.barSize         = theme.content.barSize
     self.backgroundColor = theme.content.backgroundColor
 end
 
@@ -88,7 +99,61 @@ function UIContent:onDraw()
     local color = self.backgroundColor
     love.graphics.setColor(color[1], color[2], color[3], color[4])
     love.graphics.rectangle("fill", box:getX(), box:getY(), box:getWidth(), box:getHeight())
+
+    local x, y = self.resizeSE:getPos()
+    local w, h = self.resizeSE:getPos()
+    love.graphics.line(
+        x + w * 0.9,
+        y + h * 0.1,
+        x + w * 0.1,
+        y + h * 0.9
+    )
+
     love.graphics.setColor(r, g, b, a)
+end
+
+-------------------------------------
+-- (callback)
+-- on bar down
+-------------------------------------
+function UIContent:onResizeDown(x, y)
+    self.resizeDown = true
+end
+
+-------------------------------------
+-- (callback)
+-- on bar move
+-------------------------------------
+function UIContent:onResizeMove(x, y, dx, dy)
+    if not self.resizeDown then return end
+
+    local thisX, thisY = self:getPos()
+    local thisW, thisH = self:getSize()
+    local offsetX, offsetY = thisX + dx, thisY + dy
+
+    self:setSize( thisW + dx, thisH + dy )
+end
+
+-------------------------------------
+-- (callback)
+-- on bar up
+-------------------------------------
+function UIContent:onResizeUp(x, y)
+    self.resizeDown = false
+end
+
+-------------------------------------
+-- (callback)
+-- on bar down
+-------------------------------------
+function UIContent:onBgDown(x, y)
+    x, y = self:globalToLocal(x, y)
+
+    if self.dir == "vertical" then
+        self:setBarPos(y / self:getHeight())
+    else
+        self:setBarPos(x / self:getWidth())
+    end
 end
 
 -------------------------------------
@@ -139,6 +204,12 @@ end
 -- (override)
 -------------------------------------
 function UIContent:setSize(width, height)
+    if width < self.minWidth then 
+        width = self.minWidth
+    end
+    if height < self.minHeight then 
+        height = self.minHeight
+    end
     UIControl.setSize(self, width, height)
     self:resetBar()
 end
@@ -147,6 +218,9 @@ end
 -- (override)
 -------------------------------------
 function UIContent:setWidth(width)
+    if width < self.minWidth then 
+        width = self.minWidth
+    end
     UIControl.setWidth(self, width)
     self:resetBar()
 end
@@ -155,6 +229,9 @@ end
 -- (override)
 -------------------------------------
 function UIContent:setHeight(height)
+    if height < self.minHeight then 
+        height = self.minHeight
+    end
     UIControl.setHeight(self, height)
     self:resetBar()
 end
@@ -248,15 +325,20 @@ end
 -- reset bar size & position
 -------------------------------------
 function UIControl:resetBar()
-    self.vBar:setSize(self.barSize, self:getHeight() - self.barSize)
-    self.vBar:setPos(self:getWidth() - self.barSize, 0)
+    local w, h = self:getSize()
 
-    self.hBar:setSize(self:getWidth() - self.barSize, self.barSize)
-    self.hBar:setPos(0, self:getHeight() - self.barSize)
+    self.vBar:setSize(self.barSize, h - self.barSize)
+    self.vBar:setPos(w - self.barSize, 0)
+
+    self.hBar:setSize(w - self.barSize, self.barSize)
+    self.hBar:setPos(0, h - self.barSize)
 
     local cw, ch = self:getContentSize()
-    self.vBar:setRatio(ch/self:getHeight())
-    self.hBar:setRatio(cw/self:getWidth())
+    self.vBar:setRatio(ch/h)
+    self.hBar:setRatio(cw/w)
+
+    self.resizeSE:setSize(self.barSize, self.barSize)
+    self.resizeSE:setPos(w - self.barSize, h - self.barSize)
 end
 
 return UIContent

@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UIEvent
 -- @usage
--- local event = UIEvent:new()
+-- local event = UIEvent()
 -- event:on("fuck", function(param)
 --     print("fuck you too " .. param)
 -- end)

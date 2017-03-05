@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UIProgressBar
 -- @usage
--- rogressBar = UIProgressBar:new()
+-- rogressBar = UIProgressBar()
 -- progressBar:setSize(100, 10)
 -- progressBar:setValue(40)
 -------------------------------------

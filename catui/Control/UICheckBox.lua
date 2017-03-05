@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UICheckBox
 -- @usage
--- local checkBox = UICheckBox:new()
+-- local checkBox = UICheckBox()
 -------------------------------------
 local UICheckBox = UIControl:extend("UICheckBox", {
     upColor = nil,

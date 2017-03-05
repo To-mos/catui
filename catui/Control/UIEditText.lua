@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UIEditText
 -- @usage
--- local editText = UIEditText:new()
+-- local editText = UIEditText()
 -- editText:setSize(120, 50)
 -- editText:setText("input")
 -------------------------------------

@@ -55,7 +55,7 @@ end
 
 baseMt = {
 	__call = function (self,...) 
-		return self:new(...) 
+		return self(...) 
 	end, 
 	__tostring = function(self,...)
 		if _instances[self] then 

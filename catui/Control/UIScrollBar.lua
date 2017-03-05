@@ -25,7 +25,7 @@ SOFTWARE.
 -------------------------------------
 -- UIScrollBar
 -- @usage
--- local bar = UIScrollBar:new()
+-- local bar = UIScrollBar()
 -- bar:setSize(100, 20)
 -- bar:setDir("vertical")
 -------------------------------------

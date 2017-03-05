@@ -14,7 +14,7 @@ You should expand your own control, but you can also use the control folder unde
 ```
 require "catui"
 
-local myBtn = UIControl:new()
+local myBtn = UIControl()
 myBtn:setPos(100, 100)
 myBtn:setSize(100, 40)
 
