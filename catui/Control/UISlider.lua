@@ -98,7 +98,7 @@ function UISlider:onDraw()
     local lineWidth  = love.graphics.getLineWidth()
     local color      = self.barColor
 
-    love.graphics.rectangle( 'fill', x, y, self.width, self.height )
+    -- love.graphics.rectangle( 'fill', x, y, self.width, self.height )
 
     --line
     love.graphics.setLineWidth( self.barThickness )

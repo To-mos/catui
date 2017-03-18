@@ -42,13 +42,13 @@ local UIScrollBar = UIControl:extend("UIScrollBar", {
     barPosRatio = 0,
 })
 
--------------------------------------
+-------------------------------------`
 -- construct
 -------------------------------------
 function UIScrollBar:init()
     UIControl.init(self)
 
-    self.bar = UIButton:new()
+    self.bar = UINode:new()
     self.bar.events:on(UI_MOUSE_DOWN, self.onBarDown, self)
     self.bar.events:on(UI_MOUSE_MOVE, self.onBarMove, self)
     self.bar.events:on(UI_MOUSE_UP, self.onBarUp, self)
@@ -88,7 +88,7 @@ function UIScrollBar:initTheme(_theme)
     self.hoverColor = theme.scrollBar.hoverColor
     self.backgroundColor = theme.scrollBar.backgroundColor
 
-    self.bar:setStroke(0)
+    -- self.bar:setStroke(0)
     self.bar:setUpColor(self.upColor)
     self.bar:setDownColor(self.downColor)
     self.bar:setHoverColor(self.hoverColor)

@@ -28,22 +28,16 @@ SOFTWARE.
 -- local button = UIButton()
 -------------------------------------
 local UIButton = UIControl:extend("UIButton", {
-    isHoved = false,
-    isPressed = false,
-
     text = "",
     font = nil,
     fontColor = nil,
     textDrawable = nil,
     iconImg = nil,
     iconDir = "left",
-    upColor = nil,
-    downColor = nil,
-    hoverColor = nil,
-    disableColor = nil,
     strokeColor = nil,
     stroke = 1,
-    iconAndTextSpace = 6
+    iconAndTextSpace = 6,
+    button = nil
 })
 
 -------------------------------------
@@ -51,14 +45,15 @@ local UIButton = UIControl:extend("UIButton", {
 -------------------------------------
 function UIButton:init()
     UIControl.init(self)
+
+    self.button = UINode:new()
+    self.button:setDepth(1)
+    self:addChild(self.button)
+
     self:initTheme()
     self:setEnabled(true)
 
-    self.events:on(UI_DRAW, self.onDraw, self)
-    self.events:on(UI_MOUSE_ENTER, self.onMouseEnter, self)
-    self.events:on(UI_MOUSE_LEAVE, self.onMouseLeave, self)
-    self.events:on(UI_MOUSE_DOWN, self.onMouseDown, self)
-    self.events:on(UI_MOUSE_UP, self.onMouseUp, self)
+    self.events:on(UI_DRAW_AFTER, self.onDraw, self)
 end
 
 -------------------------------------
@@ -67,12 +62,16 @@ end
 -------------------------------------
 function UIButton:initTheme(_theme)
     local theme = UITheme or _theme
+    
     self.width = theme.button.width
     self.height = theme.button.height
-    self.upColor = theme.button.upColor
-    self.downColor = theme.button.downColor
-    self.hoverColor = theme.button.hoverColor
-    self.disableColor = theme.button.disableColor
+
+    self.button.upColor = theme.button.upColor
+    self.button.downColor = theme.button.downColor
+    self.button.hoverColor = theme.button.hoverColor
+    self.button.disableColor = theme.button.disableColor
+    self.button:setSize(self.width, self.height)
+
     self.strokeColor = theme.button.strokeColor
     self.stroke = theme.button.stroke
     self.font = love.graphics.newFont(theme.button.font, theme.button.fontSize)
@@ -87,27 +86,15 @@ end
 -- draw self
 -------------------------------------
 function UIButton:onDraw()
+    
     local box  = self:getBoundingBox()
     local x, y = box.left, box.top
     local w, h = box:getWidth(), box:getHeight()
 
     local r, g, b, a = love.graphics.getColor()
-    local color = self.disableColor
-
-    -- 按钮本身
-    if self.isPressed then
-        color = self.downColor
-    elseif self.isHoved then
-        color = self.hoverColor
-    elseif self.enabled then
-        color = self.upColor
-    end
-
-    love.graphics.setColor(color[1], color[2], color[3], color[4])
-    -- love.graphics.rectangle("fill", x, y, w, h)
-    self:drawOOBox( "fill", x, y, w, h )
-
-    -- 按钮描边
+    local color = nil
+    
+    -- Button strokes 按钮描边
     if self.enabled then
         local oldLineWidth = love.graphics.getLineWidth()
         love.graphics.setLineWidth(self.stroke)
@@ -119,7 +106,7 @@ function UIButton:onDraw()
         love.graphics.setLineWidth(oldLineWidth)
     end
 
-    -- 计算文字与图标位置
+    -- Calculate the position of the text and icon 计算文字与图标位置
     local text = self.textDrawable
     local textWidth = text and text:getWidth() or 0
     local textHeight = text and text:getHeight() or 0
@@ -152,55 +139,19 @@ function UIButton:onDraw()
         iconX, iconY = UIUtils.rotatePt( iconX, iconY, iconX + w * 0.5, iconY + h * 0.5, self.angle )
     end
 
-    -- 文本
+    -- text 文本
     if text then
         color = self.fontColor
         love.graphics.setColor(color[1], color[2], color[3], color[4])
         love.graphics.draw(text, textX, textY, toRad(self.angle))
     end
 
-    -- 图标
+    -- icon 图标
     if self.iconImg then
         love.graphics.draw(icon, iconX, iconY, toRad(self.angle))
     end
 
     love.graphics.setColor(r, g, b, a)
-end
-
--------------------------------------
--- (callback)
--- on mouse enter
--------------------------------------
-function UIButton:onMouseEnter()
-    self.isHoved = true
-    if love.mouse.getSystemCursor("hand") then
-        love.mouse.setCursor(love.mouse.getSystemCursor("hand"))
-    end
-end
-
--------------------------------------
--- (callback)
--- on mouse level
--------------------------------------
-function UIButton:onMouseLeave()
-    self.isHoved = false
-    love.mouse.setCursor()
-end
-
--------------------------------------
--- (callback)
--- on mouse down
--------------------------------------
-function UIButton:onMouseDown(x, y)
-    self.isPressed = true
-end
-
--------------------------------------
--- (callback)
--- on mouse up
--------------------------------------
-function UIButton:onMouseUp(x, y)
-    self.isPressed = false
 end
 
 -------------------------------------
@@ -226,38 +177,6 @@ end
 function UIButton:setText(text)
     self.text = text
     self.textDrawable:set(text)
-end
-
--------------------------------------
--- set button up color
--- @tab color color = {r, g, b, a}
--------------------------------------
-function UIButton:setUpColor(color)
-    self.upColor = color
-end
-
--------------------------------------
--- set button down color
--- @tab color color = {r, g, b, a}
--------------------------------------
-function UIButton:setDownColor(color)
-    self.downColor = color
-end
-
--------------------------------------
--- set button hover color
--- @tab color color = {r, g, b, a}
--------------------------------------
-function UIButton:setHoverColor(color)
-    self.hoverColor = color
-end
-
--------------------------------------
--- set button disable color
--- @tab color color = {r, g, b, a}
--------------------------------------
-function UIButton:setDisableColor(color)
-    self.disableColor = color
 end
 
 -------------------------------------

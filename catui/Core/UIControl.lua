@@ -84,6 +84,8 @@ function UIControl:update(dt)
     for i,v in ipairs(self.children) do
         v:update(dt)
     end
+
+    self.events:dispatch(UI_UPDATE_AFTER, dt)
 end
 
 -------------------------------------
@@ -99,8 +101,10 @@ function UIControl:draw()
     self.events:dispatch(UI_DRAW)
 
     for i,v in ipairs(self.children) do
-        v:draw(dt)
+        v:draw()
     end
+
+    self.events:dispatch(UI_DRAW_AFTER)
 
     self:clipEnd()
 end

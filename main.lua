@@ -1,11 +1,12 @@
 require "catui"
+inspect = require "inspect"
 
 local buttonD
 local progressBarD
 local progressBarE
 local UIMgr
 
-function love.load(arg)
+function love.load( arg )
     love.graphics.setBackgroundColor(35, 42, 50, 255)
 
     UIMgr = UIManager:getInstance()
@@ -16,7 +17,7 @@ function love.load(arg)
     content:setContentSize(500, 500)
     content:resizable( true )
     content:setMinSize( 60, 60 )
-    UIMgr.rootCtrl.coreContainer:addChild(content)
+    UIMgr.rootCtrl.coreContainer:addChild( content )
 
 
     local buttonA = UIButton:new()
@@ -110,22 +111,23 @@ function love.load(arg)
     buttonD:setIcon("img/icon_haha.png")
     buttonD:setIconDir("right")
     buttonD:setAnchor(0, 0)
-    content:addChild(buttonD)
+    -- content:addChild(buttonD)
 
     local editTextAng = UIEditText:new()
     editTextAng:setPos(20, 360)
     editTextAng:setSize(120, 20)
     editTextAng:setText("Angle Text!")
     editTextAng:setAngle(25)
-    content:addChild(editTextAng)
+    -- content:addChild(editTextAng)
 
     local slider = UISlider:new()
     slider:setPos(150, 310)
     slider:setSize(100, 15)
-    content:addChild(slider)
+    slider:setEnabled(false)
+    -- content:addChild(slider)
 end
 
-function love.update(dt)
+function love.update( dt )
     local time = love.timer.getTime( )
     local sin = math.sin
 
@@ -146,37 +148,37 @@ function love.update(dt)
         --rotate between -45 and +45 deg
         buttonD:setAngle( sin(time * 0.25) * 45 )
     end
-    UIMgr:update(dt)
+    UIMgr:update( dt )
 end
 
 function love.draw()
     UIMgr:draw()
 end
 
-function love.mousemoved(x, y, dx, dy)
-    UIMgr:mouseMove(x, y, dx, dy)
+function love.mousemoved( x, y, dx, dy )
+    UIMgr:mouseMove( x, y, dx, dy )
 end
 
-function love.mousepressed(x, y, button, isTouch)
-    UIMgr:mouseDown(x, y, button, isTouch)
+function love.mousepressed( x, y, button, isTouch )
+    UIMgr:mouseDown( x, y, button, isTouch )
 end
 
-function love.mousereleased(x, y, button, isTouch)
-    UIMgr:mouseUp(x, y, button, isTouch)
+function love.mousereleased( x, y, button, isTouch )
+    UIMgr:mouseUp( x, y, button, isTouch )
 end
 
-function love.keypressed(key, scancode, isrepeat)
-    UIMgr:keyDown(key, scancode, isrepeat)
+function love.keypressed( key, scancode, isrepeat )
+    UIMgr:keyDown( key, scancode, isrepeat )
 end
 
-function love.keyreleased(key)
-    UIMgr:keyUp(key)
+function love.keyreleased( key )
+    UIMgr:keyUp( key )
 end
 
-function love.wheelmoved(x, y)
-    UIMgr:wheelMove(x, y)
+function love.wheelmoved( x, y )
+    UIMgr:wheelMove( x, y )
 end
 
-function love.textinput(text)
-    UIMgr:textInput(text)
+function love.textinput( text )
+    UIMgr:textInput( text )
 end
